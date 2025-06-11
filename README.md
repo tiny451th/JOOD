@@ -13,6 +13,7 @@ Official implementation for "Playing the Fool: Jailbreaking LLMs and Multimodal 
 
 [![](https://img.shields.io/badge/CVPR-2025-blue)](https://cvpr.thecvf.com)
 [![Paper](https://img.shields.io/badge/Paper-arxiv.2503.20823-red)](https://arxiv.org/abs/2503.20823)
+[![YouTube](https://img.shields.io/badge/YouTube-video-green)](https://www.youtube.com/watch?v=9-dNyCYBAqI&t=7s)
 
 ## 🛠️ Install
 
@@ -107,10 +108,11 @@ python3 evaluate_metrics.py --eval_dir [YOUR_RESULT_DIR]
 If you find that this project helps your research, please consider citing as below:
 
 ```
-@article{jeong2025playing,
-  title={Playing the Fool: Jailbreaking LLMs and Multimodal LLMs with Out-of-Distribution Strategy},
+@inproceedings{jeong2025playing,
+  title={Playing the fool: Jailbreaking llms and multimodal llms with out-of-distribution strategy},
   author={Jeong, Joonhyun and Bae, Seyun and Jung, Yeonsung and Hwang, Jaeryong and Yang, Eunho},
-  journal={arXiv preprint arXiv:2503.20823},
+  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
+  pages={29937--29946},
   year={2025}
 }
 ```
