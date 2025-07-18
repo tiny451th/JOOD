@@ -1,0 +1,11 @@
+pip install hf_xet
+
+실험 대상: qwenvl2
+models/llm_guard의 28번째 줄: meta-llama/Meta-Llama-Guard-2-8B 추가
+
+logs/attack_2025_07_11_06_36_21_shuffle3.log
+mixup 위치: utils.mixaug.py
+
+eval_gpt의 경우 model을 gpt-40-mini로 바꿔주자
+
+

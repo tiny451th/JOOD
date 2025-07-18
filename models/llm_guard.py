@@ -25,7 +25,7 @@ class LLM_Guard():
 
         print('Initializing LLM_Guard')
 
-        model_id = "" # specify your model id here
+        model_id = "meta-llama/Meta-Llama-Guard-2-8B" # specify your model id here
         self.device = "cuda"
         dtype = torch.bfloat16
 

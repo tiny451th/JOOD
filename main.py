@@ -25,6 +25,8 @@ from utils.model_providers import query_chatgpt, \
 from utils.io import read_json, encode_base64
 from models.llm_guard import LLM_Guard
 
+from utils.shuffle import shuffle_image_patches
+
 def parse_scenario2prompts(scenarios, prompt_dir, aug):
     if aug.startswith("mixup"):
         # instruction_prefix = "There are two objects in this image.\n"
@@ -364,6 +366,38 @@ if __name__ == "__main__":
                                 pick_image_per_prompt=False if args.aug.startswith("split") else True,
                                 image_pil=augmented_image_pil[0] # TODO: support for multiple images
                             )
+                    elif args.aug.startswith("shuffle"):
+                        # patch-wise shuffle
+                        base_custom_request_id = f"attack-{args.aug}-[Scenario]{scenario}-[HarmfulImg]{harmful_image_name}-[HarmlessImg]None-[HarmfulAlpha]None"
+                        patch_num = int(args.aug.split("shuffle")[-1])
+                        _augmented_images_pil = []
+                        # for reproducibility of augmentations per run
+                        for prompt_idx in range(len(scenario2prompts[scenario])):
+                            _augmented_image_pil = shuffle_image_patches(harmful_image_path, patch_rows=patch_num, patch_cols=patch_num, 
+                                seed=string_to_hash(base_custom_request_id + f"-[PromptIdx]{prompt_idx}"))
+                            _augmented_images_pil.append(_augmented_image_pil)
+                            if prompt_idx == 0: _augmented_image_pil.save(f'outputs_{patch_num}_{patch_num}/{scenario}.png')
+                        augmented_image_pil = _augmented_images_pil
+
+                        if isinstance(augmented_image_pil, list):
+                            augmented_image_base64 = [encode_base64(img) for img in augmented_image_pil]
+                        else:
+                            augmented_image_base64 = encode_base64(augmented_image_pil)
+
+                        process_per_prompt(
+                            base_custom_request_id,
+                            scenario2prompts[scenario],
+                            augmented_image_base64,
+                            output_file,
+                            args.model,
+                            args.openai_key,
+                            args.retry_limit,
+                            args.temperature,
+                            args.max_tokens,
+                            eval_mode=False,
+                            pick_image_per_prompt=False if args.aug.startswith("split") else True,
+                            image_pil=augmented_image_pil[0] # TODO: support for multiple images
+                        )
                     else:
                         base_custom_request_id = f"attack-{args.aug}-[Scenario]{scenario}-[HarmfulImg]{harmful_image_name}-[HarmlessImg]None-[HarmfulAlpha]{args.lams[0]}"
                         image = Image.open(harmful_image_path).convert("RGBA")

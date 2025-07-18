@@ -1,0 +1,10 @@
+# /.gitignore
+
+/scripts
+
+/*/__pycache__
+
+/datasets/AdvBenchM/images
+/datasets/AdvBenchM/prompts
+/datasets/AdvBenchM/scenario_def.json
+/datasets/AdvBenchM/scenario_repr.json
