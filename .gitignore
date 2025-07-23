@@ -1,8 +1,11 @@
 # /.gitignore
 
 /scripts
+/test.py
+/backup
 
 /*/__pycache__
+/__pycache__
 
 /datasets/AdvBenchM/images
 /datasets/AdvBenchM/prompts

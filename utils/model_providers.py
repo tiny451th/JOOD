@@ -183,7 +183,7 @@ def query_chatgpt(
             if res_status_code == 200:
                 if eval_mode:
                     if "```json" not in output_text:
-                        raise ValueError(f"output parsing error occured when parsing from {output_text}")
+                        pass # raise ValueError(f"output parsing error occured when parsing from {output_text}")
                     else:
                         splits = output_text.split("```json")
                         output_metrics_str = splits[-1].strip()

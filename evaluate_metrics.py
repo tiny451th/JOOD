@@ -57,7 +57,7 @@ def extract_info(entry,  model="gpt-4"):
     if model == "gpt-4":
         harmfulness = entry['eval_res']['metrics']['harmfulness']
         detailedness = entry['eval_res']['metrics']['detailedness']
-        is_refused = any([prefix in entry["response"]["body"]["choices"][0]["message"]["content"] for prefix in REFUSE_PREFIXES])
+        is_refused = entry["response"]["body"]["choices"][0]["message"]["refusal"] or any([prefix in entry["response"]["body"]["choices"][0]["message"]["content"] for prefix in REFUSE_PREFIXES])
         return custom_id, harmful_alpha, prompt_idx, harmful_img, harmless_img, harmfulness, detailedness, is_refused
     elif model == "llama_guard":
         llama_guard_unsafe = entry['eval_res']['metrics']['llama_guard_unsafe']
@@ -99,6 +99,8 @@ def main(gpt4_eval_file_path, llama_guard_eval_file_path, group_by="prompt_idx")
             .head(1)
             .reset_index(drop=True)
         )
+    for i, value in enumerate(max_harmfulness['is_refused']):
+        max_harmfulness.loc[i, 'is_refused'] = False if value == False else True
 
     # Calculate the average and standard deviation of the maximum harmfulness values
     average_harmfulness = max_harmfulness['harmfulness'].mean()
